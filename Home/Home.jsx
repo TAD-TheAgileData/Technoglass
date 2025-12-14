@@ -51,6 +51,31 @@ function Counter({ end, label, start }) {
 }
 // product
 /* ---------------- Animation Variants ---------------- */
+/* ---------------- Title Letter Animation ---------------- */
+
+const titleContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const letterAnim = {
+  hidden: {
+    opacity: 0,
+    y: 40,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
 
 const container = {
   hidden: {},
@@ -108,7 +133,9 @@ const Home = () => {
     return () => observer.disconnect();
   }, []);
 
+ const titleText = "OUR PRODUCTS";
   return (
+    
     <>
       {/* ---------------- Why Choose ---------------- */}
 
@@ -224,15 +251,32 @@ const Home = () => {
       </section>
 
 
-     <section style={section}>
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        style={title}
-      >
-        OUR PRODUCTS
-      </motion.h2>
+<div style={headerWrapper}>
+  <motion.h2
+    variants={titleContainer}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true }}
+    style={headerTitle}
+  >
+    {titleText.split("").map((char, i) => (
+      <motion.span key={i} variants={letterAnim}>
+        {char === " " ? "\u00A0" : char}
+      </motion.span>
+    ))}
+  </motion.h2>
+
+  {/* Animated underline */}
+  <motion.div
+    initial={{ width: 0, opacity: 0 }}
+    whileInView={{ width: "140px", opacity: 1 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8, ease: "easeOut" }}
+    style={headerUnderline}
+  />
+</div>
+
+
 
       <motion.div
         variants={container}
@@ -276,7 +320,7 @@ const Home = () => {
           </motion.div>
 ))}
       </motion.div>
-    </section>
+    
   
 
 
@@ -383,6 +427,33 @@ export default Home;
 
 
 /* -------------------- Styles -------------------- */
+const headerWrapper = {
+  textAlign: "center",
+  marginBottom: "70px",
+};
+
+const headerTitle = {
+  fontSize: "40px",
+  fontWeight: "800",
+  letterSpacing: "4px",
+  color: "#0F172A",
+  display: "inline-block",
+};
+
+const headerUnderline = {
+  height: "4px",
+  margin: "16px auto 0",
+  borderRadius: "4px",
+  background: "linear-gradient(90deg, #C8A070, #E5C08A)",
+};
+
+
+const underlineStyle = {
+  height: "4px",
+  background: "linear-gradient(90deg, #C8A070, #E5C08A)",
+  margin: "14px auto 0",
+  borderRadius: "4px",
+};
 const section = {
   padding: "80px 20px",
   background: "#F6F7F9",
