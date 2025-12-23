@@ -1,358 +1,294 @@
-// src/pages/ContactPage.jsx
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  MdLocationOn,
+  MdPhone,
+  MdEmail,
+  MdWarning,
+} from "react-icons/md";
 
+/* ---------------- COLORS ---------------- */
+const COLORS = {
+  white: "#FFFFFF",        // Crystal White
+  frost: "#D9D9D9",        // Frost Gray
+  ice: "#A7D8F0",          // Ice Blue
+  cyan: "#00BFFF",         // Cyan Glow
+  steel: "#4682B4",        // Steel Blue
+  navy: "#1C2833",         // Deep Navy
+  glassGreen: "#7FFFD4",   // Glass Green
+};
 
+/* ---------------- Animation ---------------- */
+const fade = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+/* ---------------- Component ---------------- */
 export default function ContactPage() {
-  const [form, setForm] = useState({
-    drawings: null,
-    glassSpecs: "",
-    name: "",
-    email: "",
-    phone: "",
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((s) => ({ ...s, [name]: value }));
-  };
-
-  const handleFile = (e) => {
-    setForm((s) => ({ ...s, drawings: e.target.files[0] || null }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Quote request submitted (demo)");
-  };
-
-  const cardVariant = {
-    hidden: { opacity: 0, y: 24 },
-    show: { opacity: 1, y: 0 },
-  };
-const [isDragging, setIsDragging] = useState(false);
+  const [tab, setTab] = useState("write");
+  const fileRef = useRef(null);
 
   return (
-    <div
-      style={{ fontFamily: "Inter, Arial, sans-serif" }}
-      className="relative min-h-screen overflow-hidden bg-[#F4F6F9] text-black"
-    >
+    <div style={pageBg()}>
+      <div style={container()}>
 
-      {/* ------- Premium animated background (white theme) ------- */}
-<div
-  className="absolute inset-0"
-  aria-hidden
-  style={{ pointerEvents: "none" }}
->
-  {/* subtle gradient glows */}
-  <div className="absolute inset-0" style={{ pointerEvents: "none" }}>
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        background:
-          "radial-gradient(circle at 20% 30%, rgba(0,150,255,0.10), transparent 45%)",
-        pointerEvents: "none",
-      }}
-    />
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        background:
-          "radial-gradient(circle at 80% 70%, rgba(140,60,255,0.10), transparent 45%)",
-        pointerEvents: "none",
-      }}
-    />
-  </div>
+        {/* ---------------- Heading ---------------- */}
+        <h1 style={heading()}>Contact Us</h1>
+        <p style={tagline()}>
+          We're Here to Help – Get in Touch for Inquiries, Quotes, or Partnerships
+        </p>
 
-  {/* animated white shimmer */}
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: [0, 0.08, 0] }}
-    transition={{ duration: 8, repeat: Infinity }}
-    style={{
-      position: "absolute",
-      inset: 0,
-      background:
-        "linear-gradient(90deg, rgba(255,255,255,0.25), transparent 35%)",
-      mixBlendMode: "screen",
-      filter: "blur(16px)",
-      pointerEvents: "none",
-    }}
-  />
+        {/* ---------------- Tabs ---------------- */}
+        <div style={tabs()}>
+          {[
+            ["write", "Write to Us"],
+            ["touch", "Get in Touch"],
+            ["visit", "Visit"],
+            ["map", "Map"],
+          ].map(([id, label]) => (
+            <span
+              key={id}
+              onClick={() => setTab(id)}
+              style={tabBtn(tab === id)}
+            >
+              {label}
+              {tab === id && <div style={underline()} />}
+            </span>
+          ))}
+        </div>
 
-  {/* soft grid */}
-  <div
-    style={{
-      position: "absolute",
-      inset: 0,
-      backgroundImage:
-        "linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px)",
-      backgroundSize: "70px 70px",
-      opacity: 0.5,
-      pointerEvents: "none",
-    }}
-  />
-</div>
+        {/* ---------------- Content ---------------- */}
+        <AnimatePresence mode="wait">
+          {tab === "touch" && (
+            <motion.div key="touch" variants={fade} initial="hidden" animate="show">
+              <div style={glassCard()}>
+                <Info
+                  icon={<MdLocationOn />}
+                  title="Address"
+                  text={
+                    <>
+                      Industrial Area Phase 5, Street 74<br />
+                      Jeddah, Saudi Arabia<br />
+                      P.O. Box: 32013, Jeddah 21428
+                    </>
+                  }
+                />
+                <Info
+                  icon={<MdPhone />}
+                  title="Phone"
+                  text={
+                    <>
+                      <a href="tel:+966126379909">+966 12 637 9909</a><br />
+                      Fax: +966 12 637 2041
+                    </>
+                  }
+                />
+                <Info
+                  icon={<MdEmail />}
+                  title="Email"
+                  text={
+                    <a href="mailto:info@technoglass.com.sa">
+                      info@technoglass.com.sa
+                    </a>
+                  }
+                />
+              </div>
+            </motion.div>
+          )}
 
+          {tab === "write" && (
+            <motion.form key="write" variants={fade} initial="hidden" animate="show" style={glassCard()}>
+              <label style={label()}>Upload Drawings</label>
+              <div style={upload()} onClick={() => fileRef.current.click()}>
+                Click to upload file
+              </div>
+              <input ref={fileRef} type="file" hidden />
 
-      {/* ---------------- Main Page Content ---------------- */}
-      <div className="relative z-10 px-6 py-20 max-w-6xl mx-auto">
+              <label style={label()}>Message</label>
+              <textarea rows="4" style={input()} />
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          style={{
-            fontSize: "2.8rem",
-            fontWeight: 800,
-            textAlign: "center",
-            color: "#000",
-          }}
-          className="mb-12"
-        >
-          Contact & Support
-        </motion.h1>
+              <div style={grid()}>
+                <input placeholder="Name" style={input()} />
+                <input placeholder="Email" style={input()} />
+                <input placeholder="Phone" style={input()} />
+              </div>
 
-        {/* ----------- 6.1 Request Quote -------------- */}
-       
+              <p style={note()}>We'll respond within 24–48 hours.</p>
 
-        <motion.form
-          onSubmit={handleSubmit}
-          variants={cardVariant}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{
-            background: "#FFFFFF",
-            borderRadius: 20,
-            padding: 28,
-            border: "1px solid #E5E7EB",
-            boxShadow: "0 10px 35px rgba(0,0,0,0.08)",
-            marginBottom: 28,
-            color: "black",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div
-              style={{
-                width: 6,
-                height: 40,
-                background: "linear-gradient(180deg,#007BFF,#5A00FF)",
-                borderRadius: 6,
-              }}
-            />
-            <div>
-              <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>
-                Request a Project Quote
-              </h2>
-              <p style={{ margin: 0, color: "#555" }}>
-                Upload drawings, enter glass specs and submit contact details.
-              </p>
-            </div>
-          </div>
+              <button style={btn()}>Send Message</button>
+            </motion.form>
+          )}
 
-          {/* Upload file */}
-          {/* Upload file with drag & drop */}
-<div style={{ marginTop: 20 }}>
-  <label className="font-semibold block mb-1 text-black">
-    Upload Drawings
-  </label>
+          {tab === "visit" && (
+            <motion.div key="visit" variants={fade} initial="hidden" animate="show" style={glassCard()}>
+              <h3 style={sectionTitle()}>
+                <MdWarning /> Visit Our Facility
+              </h3>
+              <ul style={list()}>
+                <li>Observe all safety signs</li>
+                <li>No photography inside plant</li>
+                <li>Safety shoes mandatory</li>
+              </ul>
+            </motion.div>
+          )}
 
-  {/* Drag & Drop Box */}
-  <div
-    onDragOver={(e) => {
-      e.preventDefault();
-      setIsDragging(true);
-    }}
-    onDragLeave={() => setIsDragging(false)}
-    onDrop={(e) => {
-      e.preventDefault();
-      setIsDragging(false);
-      const file = e.dataTransfer.files[0];
-      setForm((s) => ({ ...s, drawings: file }));
-    }}
-    onClick={() => document.getElementById("fileInput").click()}
-    style={{
-      width: "100%",
-      padding: "30px",
-      borderRadius: 14,
-      border: isDragging
-        ? "2px dashed #007BFF"
-        : "2px dashed #C9C9C9",
-      background: isDragging ? "#E9F3FF" : "#F8F9FA",
-      textAlign: "center",
-      color: "#000",
-      cursor: "pointer",
-      transition: "0.2s",
-    }}
-  >
-    {form.drawings ? (
-      <strong>{form.drawings.name}</strong>
-    ) : (
-      <div>
-        <p style={{ margin: 0, fontWeight: 600 }}>Drag & Drop your file</p>
-        <p style={{ margin: 0, fontSize: 13 }}>or click to browse</p>
-      </div>
-    )}
-  </div>
-
-  {/* Hidden File Input */}
-  <input
-    id="fileInput"
-    type="file"
-    onChange={(e) =>
-      setForm((s) => ({ ...s, drawings: e.target.files[0] }))
-    }
-    style={{ display: "none" }}
-  />
-</div>
-
-
-          {/* Glass Specs */}
-          <div className="mt-4">
-            <label className="font-semibold block mb-1 text-black">
-              Glass Specifications
-            </label>
-            <textarea
-              name="glassSpecs"
-              rows="4"
-              value={form.glassSpecs}
-              onChange={handleChange}
-              placeholder="Example: 6mm + 6mm laminated, Low-E, IGU, etc."
-              style={{
-                width: "100%",
-                padding: 14,
-                borderRadius: 12,
-                background: "#F8F9FA",
-                border: "1px solid #DDD",
-                color: "#000",
-              }}
-            ></textarea>
-          </div>
-
-          {/* Inputs */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-            <input
-              name="name"
-              placeholder="Name"
-              value={form.name}
-              onChange={handleChange}
-              style={inputStyle()}
-            />
-            <input
-              name="email"
-              placeholder="Email"
-              value={form.email}
-              onChange={handleChange}
-              style={inputStyle()}
-            />
-            <input
-              name="phone"
-              placeholder="Phone"
-              value={form.phone}
-              onChange={handleChange}
-              style={inputStyle()}
-            />
-          </div>
-
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.98 }}
-            type="submit"
-            style={{
-              marginTop: 20,
-              width: "100%",
-              padding: "14px 18px",
-              borderRadius: 12,
-              border: "none",
-              background: "linear-gradient(90deg,#007BFF,#0053D6)",
-              color: "white",
-              fontWeight: 700,
-              cursor: "pointer",
-              boxShadow: "0 8px 25px rgba(0,80,255,0.25)",
-            }}
-          >
-            Submit Quote Request
-          </motion.button>
-        </motion.form>
-
-        {/* -------- 6.2 International Sales -------- */}
-        <motion.section
-          variants={cardVariant}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          style={cardBoxStyle()}
-        >
-          <h3 className="font-bold text-xl">International Sales</h3>
-          <p>Dedicated global sales team supporting distributors and projects worldwide.</p>
-        </motion.section>
-
-        {/* -------- 6.3 Technical Support -------- */}
-        <motion.section
-          variants={cardVariant}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          style={cardBoxStyle()}
-        >
-          <h3 className="font-bold text-xl">Technical Support</h3>
-          <p>Engineering assistance with a typical response time of 24–48 hours.</p>
-        </motion.section>
-
-        {/* -------- 6.4 Location & Map -------- */}
-        <motion.section
-  variants={cardVariant}
-  initial="hidden"
-  whileInView="show"
-  viewport={{ once: true }}
-  style={cardBoxStyle()}
->
-  <h3 className="font-bold text-xl">Location & Map</h3>
-  <p>Visit our manufacturing plant and corporate office.</p>
-
-  <div className="mt-3 rounded-xl overflow-hidden border border-gray-300">
-    <iframe
-      title="Factory Map"
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3623524.529737358!2d43.81525861370253!3d23.88594238947214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x156e59c09dcf1e0f%3A0x4f4f49e5c060e7f2!2sSaudi%20Arabia!5e0!3m2!1sen!2ssa!4v1700000000000!5m2!1sen!2ssa"
-      style={{ width: "100%", height: 300, border: 0 }}
-      loading="lazy"
-      allowFullScreen=""
-      referrerPolicy="no-referrer-when-downgrade"
-    ></iframe>
-  </div>
-</motion.section>
-
+          {tab === "map" && (
+            <motion.div key="map" variants={fade} initial="hidden" animate="show">
+              <iframe
+                title="Technoglass Factory Location Map in Jeddah"
+                src="https://www.google.com/maps?q=Industrial+Area+Phase+5,+Jeddah&output=embed"
+                style={map()}
+                loading="lazy"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </div>
   );
 }
 
-/* -------------------- Helper Styles -------------------- */
-function cardBoxStyle() {
-  return {
-    background: "#FFFFFF",
-    padding: 20,
-    borderRadius: 16,
-    border: "1px solid #E5E7EB",
-    color: "black",
-    boxShadow: "0 10px 35px rgba(0,0,0,0.07)",
-    marginBottom: 22,
-  };
-}
+/* ---------------- UI Helpers ---------------- */
+const Info = ({ icon, title, text }) => (
+  <div style={{ display: "flex", gap: 14, marginBottom: 20 }}>
+    <div style={iconBox()}>{icon}</div>
+    <div>
+      <strong style={{ color: COLORS.white }}>{title}</strong>
+      <div style={{ color: COLORS.frost }}>{text}</div>
+    </div>
+  </div>
+);
 
-function inputStyle() {
-  return {
-    padding: 12,
-    width: "100%",
-    borderRadius: 12,
-    border: "1px solid #DDD",
-    background: "#F8F9FA",
-    color: "black",
-    outline: "none",
-  };
-}
+/* ---------------- Styles ---------------- */
+const pageBg = () => ({
+  minHeight: "100vh",
+  background: `linear-gradient(180deg,${COLORS.navy},#0E1620)`,
+});
+
+const container = () => ({
+  maxWidth: 1200,
+  margin: "auto",
+  padding: "80px 16px",
+  fontFamily: '"Inter","Segoe UI",Arial,sans-serif',
+});
+
+const heading = () => ({
+  textAlign: "center",
+  color: COLORS.white,
+  fontSize: "clamp(2.2rem,5vw,3rem)",
+  fontWeight: 800,
+});
+
+const tagline = () => ({
+  textAlign: "center",
+  color: COLORS.ice,
+  marginBottom: 40,
+});
+
+const tabs = () => ({
+  display: "flex",
+  justifyContent: "center",
+  gap: 30,
+  marginBottom: 40,
+});
+
+const tabBtn = (active) => ({
+  cursor: "pointer",
+  fontWeight: 600,
+  color: active ? COLORS.cyan : COLORS.frost,
+});
+
+const underline = () => ({
+  height: 3,
+  background: COLORS.cyan,
+  marginTop: 6,
+  borderRadius: 4,
+});
+
+const glassCard = () => ({
+  background: "rgba(255,255,255,0.18)",
+  backdropFilter: "blur(16px)",
+  borderRadius: 20,
+  padding: 26,
+  border: `1px solid ${COLORS.steel}`,
+  boxShadow: "0 25px 50px rgba(0,0,0,0.4)",
+});
+
+const label = () => ({
+  color: COLORS.ice,
+  fontWeight: 600,
+  marginBottom: 6,
+  display: "block",
+});
+
+const input = () => ({
+  width: "100%",
+  padding: 14,
+  borderRadius: 12,
+  border: `1px solid ${COLORS.steel}`,
+});
+
+const upload = () => ({
+  padding: 30,
+  border: `2px dashed ${COLORS.cyan}`,
+  borderRadius: 14,
+  textAlign: "center",
+  cursor: "pointer",
+  color: COLORS.white,
+  marginBottom: 16,
+});
+
+const grid = () => ({
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
+  gap: 14,
+  marginTop: 14,
+});
+
+const note = () => ({
+  fontSize: 13,
+  color: COLORS.frost,
+  marginTop: 10,
+});
+
+const btn = () => ({
+  marginTop: 20,
+  padding: "14px 28px",
+  borderRadius: 14,
+  border: "none",
+  background: `linear-gradient(90deg,${COLORS.cyan},${COLORS.steel})`,
+  color: COLORS.white,
+  fontWeight: 700,
+});
+
+const iconBox = () => ({
+  width: 42,
+  height: 42,
+  borderRadius: 10,
+  background: COLORS.cyan,
+  color: COLORS.glassGreen,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+});
+
+const sectionTitle = () => ({
+  color: COLORS.white,
+  display: "flex",
+  gap: 8,
+  marginBottom: 12,
+});
+
+const list = () => ({
+  color: COLORS.frost,
+  lineHeight: 1.8,
+});
+
+const map = () => ({
+  width: "100%",
+  height: 360,
+  border: 0,
+  borderRadius: 20,
+});
