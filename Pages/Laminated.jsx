@@ -5,7 +5,6 @@ import img1 from "../assets/images/Laminated Glass.jpg";
 import img2 from "../assets/images/Laminated Glass.jpg";
 import img3 from "../assets/images/Laminated Glass.jpg";
 
-// Header background image
 import headerBg from "../assets/Images/Laminated Glass.jpg";
 
 export default function Laminated() {
@@ -31,8 +30,13 @@ export default function Laminated() {
   ];
 
   return (
-    <div style={{ fontFamily: "Poppins, sans-serif", background: "#eef2f7" }}>
-      {/* ======================= HEADER SECTION ======================= */}
+    <div
+      style={{
+        fontFamily: "Poppins, sans-serif",
+        background: "#1C2833", // Deep Navy
+      }}
+    >
+      {/* ================= HEADER ================= */}
       <motion.header
         style={{
           width: "100%",
@@ -50,23 +54,20 @@ export default function Laminated() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
+        {/* Glass overlay */}
         <div
           style={{
             position: "absolute",
-            width: "100%",
-            height: "100%",
-            background: "rgba(255,255,255,0.2)",
-            backdropFilter: "blur(6px)",
-            top: 0,
-            left: 0,
+            inset: 0,
+            background: "rgba(28, 40, 51, 0.65)", // Deep Navy overlay
+            backdropFilter: "blur(8px)",
           }}
-        ></div>
+        />
 
         <motion.div
           style={{
             position: "relative",
             zIndex: 2,
-            color: "white",
             maxWidth: "850px",
             padding: "20px",
           }}
@@ -79,20 +80,25 @@ export default function Laminated() {
               fontSize: "48px",
               fontWeight: "800",
               letterSpacing: "-1px",
-              background: "linear-gradient(90deg, #38bdf8, #a855f7)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
+              color: "#FFFFFF", // Crystal White
             }}
           >
             Laminated Glass
           </h1>
-          <p style={{ fontSize: "20px", marginTop: "10px", opacity: 0.9 }}>
+
+          <p
+            style={{
+              fontSize: "20px",
+              marginTop: "10px",
+              color: "#D9D9D9", // Frost Gray
+            }}
+          >
             High-safety glazing with exceptional impact resistance
           </p>
         </motion.div>
       </motion.header>
 
-      {/* ======================= THREE SECTIONS ======================= */}
+      {/* ================= SECTIONS ================= */}
       {sections.map((sec, index) => (
         <motion.div
           key={index}
@@ -102,11 +108,10 @@ export default function Laminated() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          {/* IMAGE BOX – FIXED SIZE */}
+          {/* IMAGE */}
           <motion.div
             className="img-box"
-            whileHover={{ scale: 1.05, rotate: 1 }}
-            transition={{ duration: 0.4 }}
+            whileHover={{ scale: 1.05 }}
           >
             <img src={sec.img} alt={sec.title} />
           </motion.div>
@@ -125,7 +130,7 @@ export default function Laminated() {
         </motion.div>
       ))}
 
-      {/* ======================= INLINE CSS ======================= */}
+      {/* ================= STYLES ================= */}
       <style jsx>{`
         .section {
           display: flex;
@@ -133,54 +138,61 @@ export default function Laminated() {
           align-items: center;
           padding: 100px 10%;
           gap: 50px;
-          position: relative;
         }
 
         .reverse {
           flex-direction: row-reverse;
         }
 
-        /* 🔥 SAME IMAGE SIZE FOR ALL */
+        /* Glass Card */
+        .section-content {
+          background: rgba(167, 216, 240, 0.12); /* Ice Blue */
+          backdrop-filter: blur(14px);
+          border-radius: 24px;
+          padding: 40px;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          box-shadow: 0 30px 60px rgba(0, 191, 255, 0.25); /* Cyan Glow */
+          max-width: 520px;
+        }
+
         .img-box {
           width: 550px;
           height: 380px;
           overflow: hidden;
           border-radius: 24px;
-          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-          transition: transform 0.4s ease, box-shadow 0.4s ease;
+          box-shadow: 0 25px 60px rgba(70, 130, 180, 0.45); /* Steel Blue */
         }
 
         .img-box img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          border-radius: 24px;
-          transition: 0.4s;
-        }
-
-        .section-content {
-          flex: 1;
-          max-width: 520px;
         }
 
         h2 {
           font-size: 36px;
           margin-bottom: 15px;
-          color: #0f172a;
+          color: #FFFFFF; /* Crystal White */
           font-weight: 700;
-          background: linear-gradient(90deg, #38bdf8, #a855f7);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
         }
 
         p {
           font-size: 18px;
-          color: #475569;
+          color: #D9D9D9; /* Frost Gray */
           line-height: 1.8;
-          margin-top: 10px;
         }
 
-        /* Mobile */
+        /* Optional accent */
+        h2::after {
+          content: "";
+          display: block;
+          width: 70px;
+          height: 4px;
+          margin-top: 12px;
+          background: #7FFFD4; /* Glass Green */
+          border-radius: 4px;
+        }
+
         @media (max-width: 900px) {
           .section {
             flex-direction: column;

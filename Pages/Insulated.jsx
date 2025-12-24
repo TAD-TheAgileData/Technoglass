@@ -10,6 +10,17 @@ import heroImg from "../assets/Images/vltimg3.jpg";
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
 
+/* ================= COLOR THEME ================= */
+const COLORS = {
+  crystalWhite: "#FFFFFF",
+  frostGray: "#D9D9D9",
+  iceBlue: "#A7D8F0",
+  cyanGlow: "#00BFFF",
+  steelBlue: "#4682B4",
+  deepNavy: "#1C2833",
+  glassGreen: "#7FFFD4",
+};
+
 export default function Insulated() {
   const cards = [
     {
@@ -33,7 +44,7 @@ export default function Insulated() {
   ];
 
   return (
-    <Box sx={{ background: "#eef3f7", color: "#0f172a" }}>
+    <Box sx={{ background: COLORS.deepNavy }}>
       {/* ================= HERO ================= */}
       <Box
         sx={{
@@ -45,48 +56,47 @@ export default function Insulated() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          color: "#fff",
         }}
       >
-        {/* Frosted overlay */}
+        {/* Glass overlay */}
         <Box
           sx={{
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(135deg, rgba(255,255,255,0.15), rgba(0,0,0,0.35))",
-            backdropFilter: "blur(6px)",
+              "linear-gradient(135deg, rgba(28,40,51,0.65), rgba(0,0,0,0.5))",
+            backdropFilter: "blur(10px)",
           }}
         />
-        {/* Hero Content */}
+
         <MotionBox
-          initial={{ opacity: 0, y: -50, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2 }}
-          sx={{ position: "relative", textAlign: "center", maxWidth: 720 }}
+          sx={{
+            position: "relative",
+            textAlign: "center",
+            maxWidth: 760,
+            px: 3,
+          }}
         >
           <Typography
             variant="h2"
             fontWeight={800}
             sx={{
               fontSize: { xs: "36px", md: "52px" },
-              lineHeight: 1.1,
+              color: COLORS.crystalWhite,
               mb: 2,
-              background: "linear-gradient(90deg, #38bdf8, #a855f7)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
             }}
           >
             Next-Gen Insulated Glass
           </Typography>
+
           <Typography
             variant="h6"
             sx={{
-              color: "#eef3f7",
-              opacity: 0.9,
+              color: COLORS.frostGray,
               fontSize: { xs: "16px", md: "20px" },
-              maxWidth: 600,
-              margin: "0 auto",
             }}
           >
             Precision-engineered insulated glazing solutions designed for modern
@@ -102,22 +112,12 @@ export default function Insulated() {
           fontWeight={700}
           textAlign="center"
           mb={8}
-          sx={{
-            background: "linear-gradient(90deg, #044865ff, #a855f7)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
+          sx={{ color: COLORS.crystalWhite }}
         >
           Our Glass Technologies
         </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-          }}
-        >
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {cards.map((item, i) => (
             <MotionCard
               key={i}
@@ -126,40 +126,79 @@ export default function Insulated() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
               whileHover={{
-                y: -8,
-                boxShadow: "0 35px 80px rgba(0,0,0,0.18)",
-                scale: 1.02,
+                y: -10,
+                scale: 1.03,
+                boxShadow: `0 40px 90px ${COLORS.cyanGlow}44`,
               }}
               sx={{
                 display: "grid",
                 gridTemplateColumns: { xs: "1fr", md: "0.9fr 1.1fr" },
                 gap: 4,
                 alignItems: "center",
-                borderRadius: "24px",
-                background: "rgba(255,255,255,0.75)",
-                backdropFilter: "blur(12px)",
-                p: 3,
-                boxShadow: "0 20px 50px rgba(0,0,0,0.12)",
+                borderRadius: "26px",
+                background: "rgba(167,216,240,0.12)", // Ice Blue glass
+                backdropFilter: "blur(16px)",
+                border: `1px solid ${COLORS.steelBlue}`,
+                p: 4,
+                position: "relative",
+                overflow: "hidden",
               }}
             >
+              {/* Glass texture */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  backgroundImage:
+                    'url("https://grainy-gradients.vercel.app/noise.svg")',
+                  opacity: 0.08,
+                  pointerEvents: "none",
+                }}
+              />
+
               <Box
                 component="img"
                 src={item.img}
                 alt={item.title}
                 sx={{
                   width: "100%",
-                  height: { xs: 180, md: 220 },
+                  height: { xs: 180, md: 230 },
                   objectFit: "cover",
-                  borderRadius: "20px",
+                  borderRadius: "22px",
+                  zIndex: 1,
                 }}
               />
-              <CardContent>
-                <Typography variant="h5" fontWeight={700} mb={1}>
+
+              <CardContent sx={{ zIndex: 1 }}>
+                <Typography
+                  variant="h5"
+                  fontWeight={700}
+                  mb={1}
+                  sx={{ color: COLORS.cyanGlow }}
+                >
                   {item.title}
                 </Typography>
-                <Typography variant="body1" sx={{ lineHeight: 1.7 }}>
+
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: COLORS.frostGray,
+                    lineHeight: 1.8,
+                  }}
+                >
                   {item.desc}
                 </Typography>
+
+                {/* Accent line */}
+                <Box
+                  sx={{
+                    width: 70,
+                    height: 4,
+                    background: COLORS.glassGreen,
+                    borderRadius: 2,
+                    mt: 2,
+                  }}
+                />
               </CardContent>
             </MotionCard>
           ))}
